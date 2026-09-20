@@ -1,0 +1,98 @@
+.site-footer {
+  background: var(--charcoal);
+  color: rgba(255, 255, 255, 0.78);
+  --focus: #ffffff;
+}
+
+.site-footer__grid {
+  display: grid;
+  gap: var(--space-7);
+  padding-block: var(--space-8) var(--space-7);
+}
+
+@media (min-width: 640px) {
+  .site-footer__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .site-footer__brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-footer__grid {
+    grid-template-columns: 1.7fr 1fr 1.4fr 1fr;
+    gap: var(--space-7);
+  }
+
+  .site-footer__brand {
+    grid-column: auto;
+  }
+}
+
+/* Das Logo hat einen weißen Hintergrund und wird deshalb unverändert auf einer weißen Fläche gezeigt. */
+.site-footer__logo {
+  display: inline-block;
+  margin-bottom: var(--space-4);
+  padding: 10px 14px;
+  background: var(--white);
+  border-radius: var(--radius);
+}
+
+.site-footer__logo img {
+  width: auto;
+  height: 56px;
+}
+
+.site-footer__brand p {
+  max-width: 28rem;
+  font-size: 0.95rem;
+}
+
+.site-footer__heading {
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-heading);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  color: var(--white);
+}
+
+.site-footer li + li {
+  margin-top: var(--space-2);
+}
+
+.site-footer a {
+  text-decoration: none;
+}
+
+.site-footer li a {
+  display: inline-block;
+  padding-block: 2px;
+  word-break: break-word;
+}
+
+.site-footer li a:hover {
+  color: var(--white);
+  text-decoration: underline;
+}
+
+.site-footer__wa {
+  display: inline-flex !important;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.site-footer__bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.site-footer__bottom p {
+  margin: 0;
+  padding-block: var(--space-4);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}

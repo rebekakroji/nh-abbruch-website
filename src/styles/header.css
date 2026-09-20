@@ -1,0 +1,144 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--white);
+  border-bottom: 1px solid var(--concrete);
+}
+
+.site-header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  height: var(--header-h);
+}
+
+.site-header__logo {
+  display: block;
+  flex-shrink: 0;
+}
+
+.site-header__logo img {
+  width: auto;
+  height: calc(var(--header-h) - 12px);
+}
+
+.site-header__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid var(--concrete);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--charcoal);
+  cursor: pointer;
+}
+
+.site-header__toggle:hover {
+  background: var(--warm);
+}
+
+/* Mobile: Menü als Panel unter der Kopfzeile */
+.site-nav {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: none;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--gutter) var(--space-5);
+  background: var(--white);
+  border-bottom: 1px solid var(--concrete);
+}
+
+.site-nav.is-open {
+  display: flex;
+}
+
+.site-nav__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.site-nav__link {
+  display: block;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--concrete);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--charcoal);
+  text-decoration: none;
+}
+
+.site-nav__link:hover {
+  color: var(--text);
+}
+
+.site-nav__link.is-active {
+  box-shadow: inset 3px 0 0 var(--orange);
+  padding-left: var(--space-3);
+}
+
+@media (min-width: 1180px) {
+  .site-header__toggle {
+    display: none;
+  }
+
+  .site-nav {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-5);
+    padding: 0;
+    background: none;
+    border: 0;
+  }
+
+  .site-nav__list {
+    flex-direction: row;
+    gap: var(--space-5);
+  }
+
+  .site-nav__link {
+    position: relative;
+    padding: 0.5rem 0;
+    border: 0;
+    font-size: 0.9rem;
+  }
+
+  .site-nav__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--orange);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+
+  .site-nav__link:hover::after,
+  .site-nav__link.is-active::after {
+    transform: scaleX(1);
+  }
+
+  .site-nav__link.is-active {
+    box-shadow: none;
+    padding-left: 0;
+  }
+
+  .site-nav__cta {
+    min-height: 46px;
+    padding-inline: 1.15rem;
+    font-size: 0.875rem;
+  }
+}

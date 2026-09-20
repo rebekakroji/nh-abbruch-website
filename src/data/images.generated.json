@@ -1,0 +1,125 @@
+{
+  "photos": {
+    "rueckbau": {
+      "width": 1536,
+      "height": 2048,
+      "variants": [
+        {
+          "w": 640,
+          "h": 853,
+          "src": "rueckbau-640.webp"
+        },
+        {
+          "w": 1000,
+          "h": 1333,
+          "src": "rueckbau-1000.webp"
+        },
+        {
+          "w": 1536,
+          "h": 2048,
+          "src": "rueckbau-1536.webp"
+        }
+      ]
+    },
+    "bodenbelaege-entfernen": {
+      "width": 942,
+      "height": 1666,
+      "variants": [
+        {
+          "w": 640,
+          "h": 1132,
+          "src": "bodenbelaege-entfernen-640.webp"
+        },
+        {
+          "w": 942,
+          "h": 1666,
+          "src": "bodenbelaege-entfernen-942.webp"
+        }
+      ]
+    },
+    "demontage": {
+      "width": 942,
+      "height": 1666,
+      "variants": [
+        {
+          "w": 640,
+          "h": 1132,
+          "src": "demontage-640.webp"
+        },
+        {
+          "w": 942,
+          "h": 1666,
+          "src": "demontage-942.webp"
+        }
+      ]
+    },
+    "kuechenabbau": {
+      "width": 942,
+      "height": 1666,
+      "variants": [
+        {
+          "w": 640,
+          "h": 1132,
+          "src": "kuechenabbau-640.webp"
+        },
+        {
+          "w": 942,
+          "h": 1666,
+          "src": "kuechenabbau-942.webp"
+        }
+      ]
+    },
+    "trennwand-entfernen": {
+      "width": 1108,
+      "height": 1744,
+      "variants": [
+        {
+          "w": 640,
+          "h": 1007,
+          "src": "trennwand-entfernen-640.webp"
+        },
+        {
+          "w": 1000,
+          "h": 1574,
+          "src": "trennwand-entfernen-1000.webp"
+        },
+        {
+          "w": 1108,
+          "h": 1744,
+          "src": "trennwand-entfernen-1108.webp"
+        }
+      ]
+    },
+    "entruempelung-vorher-nachher": {
+      "width": 1920,
+      "height": 1080,
+      "variants": [
+        {
+          "w": 640,
+          "h": 360,
+          "src": "entruempelung-vorher-nachher-640.webp"
+        },
+        {
+          "w": 1000,
+          "h": 563,
+          "src": "entruempelung-vorher-nachher-1000.webp"
+        },
+        {
+          "w": 1600,
+          "h": 900,
+          "src": "entruempelung-vorher-nachher-1600.webp"
+        },
+        {
+          "w": 1920,
+          "h": 1080,
+          "src": "entruempelung-vorher-nachher-1920.webp"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "src": "nh-logo.webp",
+    "w": 912,
+    "h": 315
+  }
+}
