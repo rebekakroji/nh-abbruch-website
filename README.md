@@ -88,7 +88,10 @@ Die Seite ist auf die eigene Domain im Root (`base: '/'`) eingestellt. `public/C
 2. Im Repository: *Settings → Pages → Build and deployment → Source: **GitHub Actions***.
 3. Ein Push auf `main` startet `.github/workflows/deploy.yml` (Build und Veröffentlichung). Fortschritt unter dem Tab *Actions*.
 
-Ohne eigene Domain (`https://<user>.github.io/<repo>/`) beim Build `VITE_BASE=/<repo>/` setzen und `public/CNAME` löschen.
+Der Basispfad wird im Workflow automatisch über `actions/configure-pages` gesetzt: Solange die Seite unter
+`https://<user>.github.io/<repo>/` läuft, baut GitHub mit `VITE_BASE=/<repo>/`. Sobald in *Settings → Pages* die eigene Domain
+`nhabbruch.de` eingetragen ist, ist der Basispfad `/`. Nach dem Eintragen der Domain den Workflow einmal neu starten.
+Lokal (`npm run dev`) bleibt der Basispfad `/`. Ein Build mit Unterpfad lässt sich lokal testen mit `$env:VITE_BASE="/nh-abbruch-website/"; npm run build`.
 
 ### 2. Domain bei Namecheap verbinden
 

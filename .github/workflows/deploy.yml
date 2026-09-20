@@ -25,6 +25,11 @@ jobs:
           node-version: 22
           cache: npm
 
+      # Liefert den richtigen Basispfad: "/nh-abbruch-website" auf https://<user>.github.io/<repo>/,
+      # leer ("") sobald in den Pages-Einstellungen die eigene Domain nhabbruch.de gesetzt ist.
+      - id: pages
+        uses: actions/configure-pages@v5
+
       - run: npm ci
 
       - name: Warn if the contact form endpoint is missing
@@ -33,6 +38,7 @@ jobs:
 
       - run: npm run build
         env:
+          VITE_BASE: ${{ steps.pages.outputs.base_path }}/
           # Optional: Endpunkt des Formular-Dienstes (Repository -> Settings -> Secrets and variables -> Actions -> Variables)
           VITE_FORM_ENDPOINT: ${{ vars.VITE_FORM_ENDPOINT }}
 
