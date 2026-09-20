@@ -88,10 +88,11 @@ Die Seite ist auf die eigene Domain im Root (`base: '/'`) eingestellt. `public/C
 2. Im Repository: *Settings → Pages → Build and deployment → Source: **GitHub Actions***.
 3. Ein Push auf `main` startet `.github/workflows/deploy.yml` (Build und Veröffentlichung). Fortschritt unter dem Tab *Actions*.
 
-Der Basispfad wird im Workflow automatisch über `actions/configure-pages` gesetzt: Solange die Seite unter
-`https://<user>.github.io/<repo>/` läuft, baut GitHub mit `VITE_BASE=/<repo>/`. Sobald in *Settings → Pages* die eigene Domain
-`nhabbruch.de` eingetragen ist, ist der Basispfad `/`. Nach dem Eintragen der Domain den Workflow einmal neu starten.
-Lokal (`npm run dev`) bleibt der Basispfad `/`. Ein Build mit Unterpfad lässt sich lokal testen mit `$env:VITE_BASE="/nh-abbruch-website/"; npm run build`.
+**Basispfad:** Der Build nutzt einen *relativen* Basispfad (`base: './'` in `vite.config.js`). Dadurch funktioniert derselbe Build
+unter `https://nhabbruch.de/` und unter `https://<user>.github.io/<repo>/`; beim Umstellen der Domain ist kein neuer Build mit
+anderen Einstellungen nötig. Nach dem Build prüft `scripts/check-dist.mjs`, dass `dist/` keine wurzel-absoluten Pfade
+(z. B. `/assets/...`) enthält und alle referenzierten Dateien existieren. Sobald in *Settings → Pages* die eigene Domain gesetzt ist,
+leitet GitHub die `github.io`-Projekt-URL automatisch auf `nhabbruch.de` um.
 
 ### 2. Domain bei Namecheap verbinden
 
