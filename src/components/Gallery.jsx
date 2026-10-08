@@ -11,6 +11,9 @@ const ITEMS = [
   { key: 'bodenbelaege-entfernen', label: 'Bodenbeläge entfernen' },
   { key: 'kuechenabbau', label: 'Küchenabbau' },
   { key: 'demontage', label: 'Demontage' },
+  { key: 'trockenbau', label: 'Trockenbau' },
+  { key: 'bodenleger', label: 'Bodenleger' },
+  { key: 'pflasterarbeiten-galabau', label: 'Pflasterarbeiten & GaLaBau' },
 ].map((item) => ({ ...item, ...photo(item.key), alt: ALT[item.key] }));
 
 export default function Gallery() {

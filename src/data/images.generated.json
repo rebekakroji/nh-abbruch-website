@@ -115,6 +115,64 @@
           "src": "entruempelung-vorher-nachher-1920.webp"
         }
       ]
+    },
+    "trockenbau": {
+      "width": 747,
+      "height": 1328,
+      "variants": [
+        {
+          "w": 640,
+          "h": 1138,
+          "src": "trockenbau-640.webp"
+        },
+        {
+          "w": 747,
+          "h": 1328,
+          "src": "trockenbau-747.webp"
+        }
+      ]
+    },
+    "bodenleger": {
+      "width": 1080,
+      "height": 1345,
+      "variants": [
+        {
+          "w": 640,
+          "h": 797,
+          "src": "bodenleger-640.webp"
+        },
+        {
+          "w": 1000,
+          "h": 1245,
+          "src": "bodenleger-1000.webp"
+        },
+        {
+          "w": 1080,
+          "h": 1345,
+          "src": "bodenleger-1080.webp"
+        }
+      ]
+    },
+    "pflasterarbeiten-galabau": {
+      "width": 1200,
+      "height": 1600,
+      "variants": [
+        {
+          "w": 640,
+          "h": 853,
+          "src": "pflasterarbeiten-galabau-640.webp"
+        },
+        {
+          "w": 1000,
+          "h": 1333,
+          "src": "pflasterarbeiten-galabau-1000.webp"
+        },
+        {
+          "w": 1200,
+          "h": 1600,
+          "src": "pflasterarbeiten-galabau-1200.webp"
+        }
+      ]
     }
   },
   "logo": {

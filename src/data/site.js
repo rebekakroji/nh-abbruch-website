@@ -14,6 +14,12 @@ export const SITE = {
 // die Umgebungsvariable VITE_FORM_ENDPOINT gesetzt – siehe README.
 export const FORM_ENDPOINT = import.meta.env.VITE_FORM_ENDPOINT || '';
 
+// Optionale Google-Analytics-4-Measurement-ID (Format "G-XXXXXXXXXX"). Wird beim Build über die
+// Umgebungsvariable VITE_GA_MEASUREMENT_ID gesetzt – siehe README, Abschnitt "Google Analytics & Google Ads".
+// Ist nicht geheim (jede GA4-ID ist im Browser sichtbar, sobald das Tag lädt), wird aber erst nach
+// Einwilligung geladen – siehe src/consent/.
+export const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || '';
+
 export const NAV = [
   { id: 'start', label: 'Startseite' },
   { id: 'leistungen', label: 'Leistungen' },

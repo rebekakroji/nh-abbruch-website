@@ -1,0 +1,148 @@
+/* ------------------------------------------------------------------
+   Cookie-Einwilligung: schlanke Leiste am unteren Rand, kein Overlay,
+   blockiert die Seite nicht. Dunkler Hintergrund passend zu Footer/Kontakt.
+------------------------------------------------------------------- */
+.consent-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 80;
+  background: var(--charcoal);
+  color: rgba(255, 255, 255, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.2);
+  --focus: #ffffff;
+}
+
+.consent-banner__inner {
+  width: min(100% - 2 * var(--gutter), var(--container));
+  margin-inline: auto;
+  padding-block: var(--space-5);
+  display: grid;
+  gap: var(--space-4);
+}
+
+.consent-banner__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-heading);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.consent-banner__title svg {
+  color: var(--orange);
+  flex-shrink: 0;
+}
+
+.consent-banner__text p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  max-width: 68ch;
+}
+
+.consent-banner__text a {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.consent-banner__options {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius);
+}
+
+.consent-banner__option label {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.consent-banner__option input:disabled {
+  opacity: 0.6;
+}
+
+.consent-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.consent-banner__actions .btn {
+  min-height: 44px;
+}
+
+.consent-banner__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.consent-banner__link:hover {
+  color: var(--white);
+}
+
+.consent-banner__close {
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8125rem;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.consent-banner__close:hover {
+  color: var(--white);
+}
+
+@media (min-width: 900px) {
+  .consent-banner__inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .consent-banner__options {
+    grid-column: 1 / -1;
+  }
+
+  .consent-banner__actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .consent-banner {
+    animation: consent-banner-in 0.35s ease;
+  }
+}
+
+@keyframes consent-banner-in {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

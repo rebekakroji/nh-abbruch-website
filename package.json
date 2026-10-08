@@ -6,7 +6,7 @@
   "description": "Website der NH Abbruch & Renovierung, Freising",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/check-dist.mjs",
+    "build": "vite build && node scripts/check-dist.mjs && node scripts/check-consent.mjs",
     "preview": "vite preview",
     "images": "node scripts/optimize-images.mjs"
   },

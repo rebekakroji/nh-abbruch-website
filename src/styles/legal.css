@@ -28,6 +28,33 @@
   font-weight: 600;
 }
 
+.legal p {
+  margin: 0 0 var(--space-4);
+}
+
+.legal ul {
+  margin: 0 0 var(--space-4);
+  padding-left: 1.25em;
+  list-style: disc;
+}
+
+.legal li + li {
+  margin-top: var(--space-2);
+}
+
+/* Öffnet den Cookie-Banner, sieht aber aus wie die übrigen Textlinks in den Rechtstexten. */
+.legal__inline-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--charcoal);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
 .legal__notice {
   padding: var(--space-4) var(--space-5);
   background: var(--warm);

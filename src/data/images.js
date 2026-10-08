@@ -36,4 +36,9 @@ export const ALT = {
     'Durchbruch einer entfernten Trennwand mit sichtbaren Ziegelkanten und Blick in einen hellen Raum',
   'entruempelung-vorher-nachher':
     'Vorher-nachher-Vergleich einer Entrümpelung: links ein Zimmer voller Müll und Flaschen, rechts dasselbe Zimmer leer mit Holzboden',
+  trockenbau:
+    'Flur mit neu errichteten Trockenbauwänden, sichtbaren Holzständern in den Türöffnungen und abgedecktem Boden',
+  bodenleger: 'Wohnraum mit frisch verlegtem Laminatboden, Blick zur Balkontür und Heizkörper an der Wand',
+  'pflasterarbeiten-galabau':
+    'Gepflasterter Weg im Fischgrätmuster mit Einfassung, angelegt im Rahmen von Garten- und Landschaftsbauarbeiten',
 };

@@ -23,6 +23,10 @@ const photos = [
   { key: 'kuechenabbau', file: 'Küchenabbau.jpg', crop: BARS },
   { key: 'trennwand-entfernen', file: 'Trennwand-entfernen.jpg' },
   { key: 'entruempelung-vorher-nachher', file: 'Entrümpelung.jpg' },
+  // Kleine Vorschaubilder für die drei neuen Leistungskarten (werden dort anstelle eines Icons verwendet).
+  { key: 'trockenbau', file: 'Trockenbau.jpeg' },
+  { key: 'bodenleger', file: 'Bodenleger.jpeg' },
+  { key: 'pflasterarbeiten-galabau', file: 'Pflasterarbeiten & GaLaBau.jpeg' },
 ];
 
 await mkdir(OUT, { recursive: true });

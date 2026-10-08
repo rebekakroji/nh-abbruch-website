@@ -80,6 +80,24 @@
   text-decoration: underline;
 }
 
+/* Sieht aus wie die übrigen Footer-Links, öffnet aber den Cookie-Banner statt zu navigieren. */
+.site-footer__link-button {
+  display: inline-block;
+  padding: 2px 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.site-footer__link-button:hover {
+  color: var(--white);
+  text-decoration: underline;
+}
+
 .site-footer__wa {
   display: inline-flex !important;
   align-items: center;

@@ -31,11 +31,18 @@ jobs:
         if: ${{ vars.VITE_FORM_ENDPOINT == '' }}
         run: echo "::warning::Repository variable VITE_FORM_ENDPOINT is not set. The contact form will only open the visitor's mail client (mailto). See README."
 
-      # Der Build nutzt einen relativen Basispfad (vite.config.js) und prüft danach die Pfade in dist/ (scripts/check-dist.mjs).
+      - name: Warn if the GA4 measurement ID is missing
+        if: ${{ vars.VITE_GA_MEASUREMENT_ID == '' }}
+        run: echo "::warning::Repository variable VITE_GA_MEASUREMENT_ID is not set. Google Analytics 4 stays disabled. See README."
+
+      # Der Build nutzt einen relativen Basispfad (vite.config.js) und prüft danach die Pfade in dist/
+      # (scripts/check-dist.mjs) sowie die Consent-Mode-/GA4-Konsistenz (scripts/check-consent.mjs).
       - run: npm run build
         env:
           # Optional: Endpunkt des Formular-Dienstes (Repository -> Settings -> Secrets and variables -> Actions -> Variables)
           VITE_FORM_ENDPOINT: ${{ vars.VITE_FORM_ENDPOINT }}
+          # Optional: GA4-Measurement-ID, wird erst nach Cookie-Einwilligung geladen (Repository -> Settings -> Secrets and variables -> Actions -> Variables)
+          VITE_GA_MEASUREMENT_ID: ${{ vars.VITE_GA_MEASUREMENT_ID }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

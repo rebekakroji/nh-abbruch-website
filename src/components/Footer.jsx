@@ -1,6 +1,7 @@
 import Logo from './Logo.jsx';
 import WhatsAppIcon from './WhatsAppIcon.jsx';
 import { BASE, NAV, SITE } from '../data/site.js';
+import { openConsentSettings } from '../consent/consentStore.js';
 
 export default function Footer({ isHome = true }) {
   const href = (id) => (isHome ? `#${id}` : `${BASE}#${id}`);
@@ -53,6 +54,11 @@ export default function Footer({ isHome = true }) {
             </li>
             <li>
               <a href={`${BASE}datenschutz.html`}>Datenschutzerklärung</a>
+            </li>
+            <li>
+              <button type="button" className="site-footer__link-button" onClick={openConsentSettings}>
+                Datenschutz-Einstellungen
+              </button>
             </li>
           </ul>
         </nav>

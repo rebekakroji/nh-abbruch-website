@@ -9,9 +9,10 @@ Das Design folgt [design.md](design.md).
 index.html, impressum.html, datenschutz.html   Drei Seiten (Vite Multi-Page-Build)
 src/
   components/    Header, Hero, Services, About, Gallery (+Lightbox), ServiceArea, Contact(+Form), Footer …
+  consent/       gtag.js (Consent Mode + GA4-Loader), consentStore.js, ConsentBanner.jsx
   pages/         HomePage, ImpressumPage, DatenschutzPage, LegalLayout
-  data/          site.js (Firmendaten), services.js, images.js, images.generated.json
-  styles/        base.css (Design-Tokens), header/hero/sections/contact/footer/legal.css
+  data/          site.js (Firmendaten), services.js, images.js, images.generated.json, consent.js (Speicherung)
+  styles/        base.css (Design-Tokens), header/hero/sections/contact/footer/legal/consent.css
 public/
   images/        Optimierte Bilder + Logo + Favicon + og-image (werden von `npm run images` erzeugt)
   CNAME          nhabbruch.de
@@ -77,6 +78,49 @@ Auf statischem Hosting gibt es keinen eigenen Server. Das Formular funktioniert 
 Das Formular enthält ein Honeypot-Feld gegen Spam und eine Pflicht-Checkbox zur Datenschutzerklärung.
 Was der Browser sendet (JSON per POST): `name`, `email`, `phone`, `service`, `message`, `_subject`.
 
+## Cookie-Banner, Google Analytics 4 & Google Ads
+
+Die Website zeigt allen Besuchern einen Cookie-Banner (`src/consent/ConsentBanner.jsx`) mit drei Kategorien:
+**Notwendig** (immer aktiv), **Statistik** (Google Analytics 4) und **Marketing** (Google Ads). Die Wahl wird im
+Browser gespeichert (`localStorage`, siehe `src/data/consent.js`) und gilt seitenübergreifend für `index.html`,
+`impressum.html` und `datenschutz.html`, da alle drei denselben `mount.jsx`-Einstiegspunkt verwenden.
+
+**Google Consent Mode v2:** Auf jeder Seite werden beim Laden zuerst alle vier Consent-Signale
+(`analytics_storage`, `ad_storage`, `ad_user_data`, `ad_personalization`) auf „denied“ gesetzt
+(`src/consent/gtag.js`). Das GA4-Skript (`googletagmanager.com/gtag/js`) wird erst nachgeladen, wenn die Kategorie
+„Statistik“ zugestimmt wurde – ohne Zustimmung wird keine Verbindung zu Google aufgebaut. Stimmt ein Besucher später
+zu oder widerruft, wird der Consent-Status per `gtag('consent', 'update', …)` aktualisiert. Ein Klick auf
+„Datenschutz-Einstellungen“ (Footer sowie in der Datenschutzerklärung) öffnet den Banner erneut.
+
+Es wurde nur eine GA4-Measurement-ID übergeben, keine Google-Ads-Conversion-ID. Die Kategorie „Marketing“ und alle
+vier Consent-Signale sind vollständig verdrahtet; sobald ein konkretes Google-Ads-Conversion-Tag hinzukommt, greift
+es automatisch auf denselben, bereits bestehenden Einwilligungsstatus zu.
+
+**Einrichtung:**
+
+1. **Lokal:** `.env.example` nach `.env` kopieren (falls noch nicht vorhanden) und
+   `VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX` mit der echten GA4-Measurement-ID eintragen, dann `npm run dev` neu starten.
+2. **Live:** Im GitHub-Repository unter *Settings → Secrets and variables → Actions → Variables* eine Variable
+   `VITE_GA_MEASUREMENT_ID` mit der Measurement-ID anlegen (gleiches Vorgehen wie bei `VITE_FORM_ENDPOINT`), danach
+   *Actions → Deploy to GitHub Pages → Run workflow*. Eine GA4-Measurement-ID ist nicht geheim (sie ist im Browser
+   sichtbar, sobald das Tag lädt) – trotzdem niemals andere, tatsächlich geheime Google-API-Schlüssel hier eintragen.
+
+**Build-Absicherung:** `scripts/check-consent.mjs` läuft automatisch bei `npm run build` und bricht den Build ab,
+wenn (a) `VITE_GA_MEASUREMENT_ID` nicht wie eine gültige GA4-ID aussieht, oder (b) im gebauten Code GA4-Ladecode
+vorhanden wäre, ohne dass auch die Consent-Mode-„denied“-Standardwerte darin enthalten sind. So kann die
+Einwilligungslogik nicht unbemerkt von der Google-Integration getrennt werden.
+
+**Testen:**
+
+1. `npm run dev`, Seite öffnen → Banner erscheint. Im Browser-Netzwerktab prüfen: Es darf **keine** Anfrage an
+   `googletagmanager.com` oder `google-analytics.com` stattfinden, solange nichts akzeptiert wurde.
+2. „Alle akzeptieren“ bzw. unter „Einstellungen“ „Statistik“ aktivieren und speichern → danach lädt `gtag/js` nach,
+   und im GA4-Echtzeitbericht (Google Analytics → Berichte → Echtzeit) sollte der Testaufruf erscheinen.
+3. Seite neu laden → Banner erscheint nicht erneut (Wahl wurde gespeichert), GA4 lädt sofort entsprechend der
+   gespeicherten Wahl.
+4. „Datenschutz-Einstellungen“ im Footer anklicken → Banner öffnet sich erneut mit der zuvor getroffenen Auswahl.
+5. „Nur notwendige“ wählen → im Netzwerktab darf danach keine Google-Anfrage mehr stattfinden.
+
 ## Deployment auf GitHub Pages mit nhabbruch.de
 
 Die Seite ist auf die eigene Domain im Root (`base: '/'`) eingestellt. `public/CNAME` enthält `nhabbruch.de`.
@@ -122,6 +166,8 @@ Die Werte entsprechen der GitHub-Dokumentation zu Custom Domains; bitte vor dem 
 - [ ] **Datenschutzerklärung** (`src/pages/DatenschutzPage.jsx`): Platzhalter ersetzen, Formular-Variante beschreiben, Drittlandübermittlung (GitHub/USA) prüfen. Beide Rechtstexte von einer fachkundigen Stelle prüfen lassen.
 - [ ] Den Hinweis-Kasten „Entwurf mit Platzhaltern“ (`src/pages/LegalLayout.jsx`) nach dem Ausfüllen entfernen.
 - [ ] Formular-Dienst einrichten (siehe oben) oder bewusst beim `mailto:`-Verfahren bleiben.
+- [ ] `VITE_GA_MEASUREMENT_ID` als Repository-Variable setzen (siehe oben) und den Cookie-Banner/GA4-Empfang gemäß „Testen“ prüfen.
+- [ ] Datenschutzerklärung, Abschnitt 4 (Google Analytics/Google Ads): verbleibende Platzhalter prüfen, insbesondere Speicherdauer im GA4-Konto und – sobald eingerichtet – das konkrete Google-Ads-Conversion-Tag ergänzen.
 - [ ] GitHub-Repository anlegen, Pages auf „GitHub Actions“ stellen, DNS bei Namecheap setzen, Custom Domain eintragen, HTTPS aktivieren.
 - [ ] Nach dem Livegang: Seite in der Google Search Console anmelden und `https://nhabbruch.de/sitemap.xml` einreichen; Google-Unternehmensprofil pflegen (wichtig für lokale Suche).
 - [ ] Optional: weitere echte Fotos und – nur mit Einverständnis der Kunden und mit echten Angaben – Referenzen ergänzen.
@@ -131,4 +177,5 @@ Die Werte entsprechen der GitHub-Dokumentation zu Custom Domains; bitte vor dem 
 
 - Die Texte machen keine Aussagen zu Entsorgung, Versicherung, Festpreisen, Erfahrungsjahren oder Zertifikaten. Was Sie zusätzlich versprechen möchten, bitte selbst ergänzen.
 - Schriften (Montserrat, Inter) sind lokal über `@fontsource` eingebunden – keine Verbindung zu Google-Servern.
-- Die Website setzt keine Cookies und nutzt kein Tracking; ein Cookie-Banner ist dafür nicht nötig (bei späteren Änderungen neu prüfen).
+- Die Website zeigt einen Cookie-Banner und lädt Google Analytics 4 (und vorbereitet: Google Ads) erst nach
+  Einwilligung – siehe Abschnitt „Cookie-Banner, Google Analytics 4 & Google Ads“ oben.

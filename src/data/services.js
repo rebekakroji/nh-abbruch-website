@@ -9,6 +9,9 @@ import {
   DoorOpen,
   Trash2,
   House,
+  LayoutPanelTop,
+  LayoutList,
+  Fence,
 } from 'lucide-react';
 
 export const SERVICES = [
@@ -61,6 +64,21 @@ export const SERVICES = [
     title: 'Haushaltsauflösung',
     icon: House,
     text: 'Komplette Auflösung von Haushalten – organisiert und mit Rücksicht auf Ihre Situation.',
+  },
+  {
+    title: 'Trockenbau',
+    icon: LayoutPanelTop,
+    text: 'Trockenbauwände und -decken für neue Raumaufteilungen – als Vorbereitung für den weiteren Innenausbau.',
+  },
+  {
+    title: 'Bodenleger',
+    icon: LayoutList,
+    text: 'Fachgerechte Verlegung neuer Bodenbeläge wie Laminat oder Parkett nach Abschluss der Vorarbeiten.',
+  },
+  {
+    title: 'Pflasterarbeiten & GaLaBau',
+    icon: Fence,
+    text: 'Pflasterarbeiten sowie Garten- und Landschaftsbau für Wege, Einfahrten und Außenanlagen.',
   },
 ];
 
