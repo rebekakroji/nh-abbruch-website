@@ -72,9 +72,14 @@ export default function DatenschutzPage() {
         </Placeholder>
       </p>
       <p>
-        Stimmen Sie zusätzlich der Kategorie „Marketing“ zu, dürfen die gleichen bzw. vergleichbare Technologien auch
-        für Google Ads genutzt werden, um die Wirksamkeit von Anzeigen zu messen (Conversion-Messung, ggf.
-        Remarketing). <Placeholder>Sobald ein konkretes Google-Ads-Conversion-Tag eingerichtet ist, hier Zweck, Anbieter und Funktionsweise (z. B. Remarketing-Zielgruppen) ergänzen</Placeholder>
+        Stimmen Sie zusätzlich der Kategorie „Marketing“ zu, laden wir zusätzlich das Google-Ads-Tag (Anbieter wie
+        oben, Google Ireland Limited bzw. Google LLC), damit Google Ads unsere Website als verbundene Quelle erkennt
+        und die Wirksamkeit von Anzeigen gemessen werden kann. Es ist aktuell nur das allgemeine Tag eingebunden,
+        ohne eine konkrete Conversion-Aktion (z. B. „Kontaktanfrage abgeschickt“).{' '}
+        <Placeholder>
+          Sobald in Google Ads eine konkrete Conversion-Aktion und/oder Remarketing-Zielgruppen eingerichtet werden,
+          hier Zweck, verarbeitete Daten und Funktionsweise ergänzen
+        </Placeholder>
       </p>
       <p>
         <strong>Zweck:</strong> Analyse der Websitenutzung (z. B. aufgerufene Seiten, Verweildauer, ungefähre

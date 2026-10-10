@@ -20,6 +20,13 @@ export const FORM_ENDPOINT = import.meta.env.VITE_FORM_ENDPOINT || '';
 // Einwilligung geladen – siehe src/consent/.
 export const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || '';
 
+// Optionale Google-Ads-Tag-ID (Format "AW-XXXXXXXXX"). Wird beim Build über die Umgebungsvariable
+// VITE_GOOGLE_ADS_ID gesetzt – siehe README, Abschnitt "Google Analytics & Google Ads". Nutzt
+// dasselbe gtag.js-Skript und dieselbe Consent-Mode-Logik wie GA4 (src/consent/gtag.js) und wird
+// erst nach Einwilligung in die Kategorie "Marketing" aktiviert. Es wird keine Conversion-ID/Label
+// konfiguriert, da keine übergeben wurde – nur das Basis-Tag, damit Google Ads es als verbunden erkennt.
+export const GOOGLE_ADS_ID = import.meta.env.VITE_GOOGLE_ADS_ID || '';
+
 export const NAV = [
   { id: 'start', label: 'Startseite' },
   { id: 'leistungen', label: 'Leistungen' },

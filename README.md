@@ -9,7 +9,7 @@ Das Design folgt [design.md](design.md).
 index.html, impressum.html, datenschutz.html   Drei Seiten (Vite Multi-Page-Build)
 src/
   components/    Header, Hero, Services, About, Gallery (+Lightbox), ServiceArea, Contact(+Form), Footer …
-  consent/       gtag.js (Consent Mode + GA4-Loader), consentStore.js, ConsentBanner.jsx
+  consent/       gtag.js (Consent Mode + GA4-/Google-Ads-Loader), consentStore.js, ConsentBanner.jsx
   pages/         HomePage, ImpressumPage, DatenschutzPage, LegalLayout
   data/          site.js (Firmendaten), services.js, images.js, images.generated.json, consent.js (Speicherung)
   styles/        base.css (Design-Tokens), header/hero/sections/contact/footer/legal/consent.css
@@ -87,39 +87,64 @@ Browser gespeichert (`localStorage`, siehe `src/data/consent.js`) und gilt seite
 
 **Google Consent Mode v2:** Auf jeder Seite werden beim Laden zuerst alle vier Consent-Signale
 (`analytics_storage`, `ad_storage`, `ad_user_data`, `ad_personalization`) auf „denied“ gesetzt
-(`src/consent/gtag.js`). Das GA4-Skript (`googletagmanager.com/gtag/js`) wird erst nachgeladen, wenn die Kategorie
-„Statistik“ zugestimmt wurde – ohne Zustimmung wird keine Verbindung zu Google aufgebaut. Stimmt ein Besucher später
-zu oder widerruft, wird der Consent-Status per `gtag('consent', 'update', …)` aktualisiert. Ein Klick auf
-„Datenschutz-Einstellungen“ (Footer sowie in der Datenschutzerklärung) öffnet den Banner erneut.
+(`src/consent/gtag.js`). Ein gemeinsames `gtag.js`-Skript (`googletagmanager.com/gtag/js`) und ein gemeinsamer
+`dataLayer` bedienen sowohl GA4 als auch Google Ads – es wird nie ein zweites Skript nachgeladen. Das Skript wird erst
+angefordert, sobald für mindestens eine der beiden Kategorien eingewilligt wurde; GA4 wird aktiviert
+(`gtag('config', 'G-…')`), sobald „Statistik“ zugestimmt wurde, Google Ads (`gtag('config', 'AW-…')`) unabhängig
+davon, sobald „Marketing“ zugestimmt wurde. Ohne jede Einwilligung wird keine Verbindung zu Google aufgebaut. Stimmt
+ein Besucher später zu oder widerruft, wird der Consent-Status per `gtag('consent', 'update', …)` aktualisiert. Ein
+Klick auf „Datenschutz-Einstellungen“ (Footer sowie in der Datenschutzerklärung) öffnet den Banner erneut.
 
-Es wurde nur eine GA4-Measurement-ID übergeben, keine Google-Ads-Conversion-ID. Die Kategorie „Marketing“ und alle
-vier Consent-Signale sind vollständig verdrahtet; sobald ein konkretes Google-Ads-Conversion-Tag hinzukommt, greift
-es automatisch auf denselben, bereits bestehenden Einwilligungsstatus zu.
+Für Google Ads ist nur die Tag-ID (`AW-…`) hinterlegt – keine Conversion-ID/-Label. Damit erkennt Google Ads das Tag
+als „verbunden“; es wird aber keine konkrete Conversion-Aktion (z. B. „Kontaktanfrage abgeschickt“) gemeldet. Soll
+das ergänzt werden, braucht es die Conversion-ID/-Label aus Google Ads (Tools → Conversions) und einen zusätzlichen
+`gtag('event', 'conversion', { send_to: 'AW-…/LABEL' })`-Aufruf an der passenden Stelle (z. B. nach erfolgreichem
+Formularversand) – das ist bewusst nicht erfunden/ergänzt worden.
 
 **Einrichtung:**
 
 1. **Lokal:** `.env.example` nach `.env` kopieren (falls noch nicht vorhanden) und
-   `VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX` mit der echten GA4-Measurement-ID eintragen, dann `npm run dev` neu starten.
-2. **Live:** Im GitHub-Repository unter *Settings → Secrets and variables → Actions → Variables* eine Variable
-   `VITE_GA_MEASUREMENT_ID` mit der Measurement-ID anlegen (gleiches Vorgehen wie bei `VITE_FORM_ENDPOINT`), danach
-   *Actions → Deploy to GitHub Pages → Run workflow*. Eine GA4-Measurement-ID ist nicht geheim (sie ist im Browser
-   sichtbar, sobald das Tag lädt) – trotzdem niemals andere, tatsächlich geheime Google-API-Schlüssel hier eintragen.
+   `VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX` bzw. `VITE_GOOGLE_ADS_ID=AW-XXXXXXXXX` mit den echten IDs eintragen, dann
+   `npm run dev` neu starten.
+2. **Live:** Im GitHub-Repository unter *Settings → Secrets and variables → Actions → Variables* die Variablen
+   `VITE_GA_MEASUREMENT_ID` und `VITE_GOOGLE_ADS_ID` anlegen (gleiches Vorgehen wie bei `VITE_FORM_ENDPOINT`), danach
+   *Actions → Deploy to GitHub Pages → Run workflow*. Beide IDs sind nicht geheim (im Browser sichtbar, sobald das
+   Tag lädt) – trotzdem niemals andere, tatsächlich geheime Google-API-Schlüssel hier eintragen.
 
 **Build-Absicherung:** `scripts/check-consent.mjs` läuft automatisch bei `npm run build` und bricht den Build ab,
-wenn (a) `VITE_GA_MEASUREMENT_ID` nicht wie eine gültige GA4-ID aussieht, oder (b) im gebauten Code GA4-Ladecode
-vorhanden wäre, ohne dass auch die Consent-Mode-„denied“-Standardwerte darin enthalten sind. So kann die
-Einwilligungslogik nicht unbemerkt von der Google-Integration getrennt werden.
+wenn (a) `VITE_GA_MEASUREMENT_ID` bzw. `VITE_GOOGLE_ADS_ID` nicht wie eine gültige ID aussieht, oder (b) im gebauten
+Code Google-Tag-Ladecode vorhanden wäre, ohne dass auch alle vier Consent-Mode-„denied“-Standardwerte darin
+enthalten sind. So kann die Einwilligungslogik nicht unbemerkt von der Google-Integration getrennt werden.
 
 **Testen:**
 
 1. `npm run dev`, Seite öffnen → Banner erscheint. Im Browser-Netzwerktab prüfen: Es darf **keine** Anfrage an
    `googletagmanager.com` oder `google-analytics.com` stattfinden, solange nichts akzeptiert wurde.
-2. „Alle akzeptieren“ bzw. unter „Einstellungen“ „Statistik“ aktivieren und speichern → danach lädt `gtag/js` nach,
-   und im GA4-Echtzeitbericht (Google Analytics → Berichte → Echtzeit) sollte der Testaufruf erscheinen.
-3. Seite neu laden → Banner erscheint nicht erneut (Wahl wurde gespeichert), GA4 lädt sofort entsprechend der
+2. Unter „Einstellungen“ nur „Statistik“ aktivieren und speichern → `gtag/js` lädt, GA4 wird konfiguriert, aber es
+   erscheint (noch) keine Google-Ads-Anfrage. Im Netzwerktab sollte dafür kein Request mit `AW-18445001437`
+   auftauchen.
+3. Banner erneut öffnen, zusätzlich „Marketing“ aktivieren und speichern → jetzt wird Google Ads konfiguriert
+   (`gtag('config', 'AW-18445001437')`), ohne das Skript ein zweites Mal zu laden.
+4. „Alle akzeptieren“ testen → beide Kategorien werden in einem Schritt aktiviert.
+5. Seite neu laden → Banner erscheint nicht erneut (Wahl wurde gespeichert), GA4/Ads laden sofort entsprechend der
    gespeicherten Wahl.
-4. „Datenschutz-Einstellungen“ im Footer anklicken → Banner öffnet sich erneut mit der zuvor getroffenen Auswahl.
-5. „Nur notwendige“ wählen → im Netzwerktab darf danach keine Google-Anfrage mehr stattfinden.
+6. „Datenschutz-Einstellungen“ im Footer anklicken → Banner öffnet sich erneut mit der zuvor getroffenen Auswahl.
+7. „Nur notwendige“ wählen → im Netzwerktab darf danach keine Google-Anfrage mehr stattfinden.
+
+**Google Ads auf der Live-Website verifizieren (nachdem `VITE_GOOGLE_ADS_ID` gesetzt und deployt wurde):**
+
+1. `https://nhabbruch.de/` öffnen, Cookie-Banner mit „Alle akzeptieren“ oder „Marketing“ bestätigen.
+2. Browser-Entwicklertools → Netzwerk-Tab → nach `googletagmanager.com/gtag/js` und einem Request an
+   `googleadservices.com` bzw. `google.com/ads/…` oder `google.com/pagead/…` filtern – nach der Zustimmung sollte
+   ein solcher Request erscheinen.
+3. In der Konsole `window.dataLayer` ausgeben – es sollte ein Eintrag `["config", "AW-18445001437"]` enthalten sein.
+4. Alternativ die Browser-Erweiterung *Google Tag Assistant* (von Google) auf der Seite ausführen, nachdem der
+   Einwilligung zugestimmt wurde; sie zeigt beide Tags (GA4 und Google Ads) als aktiv an.
+5. Im Google-Ads-Konto unter *Tools und Einstellungen → Conversion-Tracking* bzw. *Google Tag* prüfen, ob der
+   Status von „Nicht verbunden“ auf „Tag ist aktiv“/„Daten werden empfangen“ wechselt – das kann nach dem ersten
+   echten Seitenaufruf mit erteilter Einwilligung einige Stunden dauern, bis Google es anzeigt.
+6. Ohne Einwilligung (z. B. in einem privaten Fenster, „Nur notwendige“ wählen) darf keiner dieser Requests
+   auftauchen – das ist der Beleg, dass Google Ads nicht vor Zustimmung feuert.
 
 ## Deployment auf GitHub Pages mit nhabbruch.de
 
@@ -166,8 +191,8 @@ Die Werte entsprechen der GitHub-Dokumentation zu Custom Domains; bitte vor dem 
 - [ ] **Datenschutzerklärung** (`src/pages/DatenschutzPage.jsx`): Platzhalter ersetzen, Formular-Variante beschreiben, Drittlandübermittlung (GitHub/USA) prüfen. Beide Rechtstexte von einer fachkundigen Stelle prüfen lassen.
 - [ ] Den Hinweis-Kasten „Entwurf mit Platzhaltern“ (`src/pages/LegalLayout.jsx`) nach dem Ausfüllen entfernen.
 - [ ] Formular-Dienst einrichten (siehe oben) oder bewusst beim `mailto:`-Verfahren bleiben.
-- [ ] `VITE_GA_MEASUREMENT_ID` als Repository-Variable setzen (siehe oben) und den Cookie-Banner/GA4-Empfang gemäß „Testen“ prüfen.
-- [ ] Datenschutzerklärung, Abschnitt 4 (Google Analytics/Google Ads): verbleibende Platzhalter prüfen, insbesondere Speicherdauer im GA4-Konto und – sobald eingerichtet – das konkrete Google-Ads-Conversion-Tag ergänzen.
+- [ ] `VITE_GA_MEASUREMENT_ID` und `VITE_GOOGLE_ADS_ID` als Repository-Variablen setzen (siehe oben) und den Cookie-Banner/GA4-/Ads-Empfang gemäß „Testen“ prüfen.
+- [ ] Datenschutzerklärung, Abschnitt 4 (Google Analytics/Google Ads): verbleibende Platzhalter prüfen, insbesondere Speicherdauer im GA4-Konto und – sobald in Google Ads eine konkrete Conversion-Aktion eingerichtet ist – deren Zweck und Funktionsweise ergänzen.
 - [ ] GitHub-Repository anlegen, Pages auf „GitHub Actions“ stellen, DNS bei Namecheap setzen, Custom Domain eintragen, HTTPS aktivieren.
 - [ ] Nach dem Livegang: Seite in der Google Search Console anmelden und `https://nhabbruch.de/sitemap.xml` einreichen; Google-Unternehmensprofil pflegen (wichtig für lokale Suche).
 - [ ] Optional: weitere echte Fotos und – nur mit Einverständnis der Kunden und mit echten Angaben – Referenzen ergänzen.

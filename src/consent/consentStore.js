@@ -5,7 +5,7 @@
 // Die Nebenwirkungen (Consent Mode aktualisieren, GA4 ggf. nachladen) laufen zentral in apply(),
 // damit sie unabhängig davon greifen, ob der Banner gerade überhaupt gerendert ist.
 import { DEFAULT_CHOICE, loadStoredConsent, persistConsent } from '../data/consent.js';
-import { initConsentDefaults, loadGoogleTagIfConsented, updateGoogleConsent } from './gtag.js';
+import { initConsentDefaults, syncGoogleTags, updateGoogleConsent } from './gtag.js';
 
 const stored = loadStoredConsent();
 
@@ -33,16 +33,16 @@ export function getConsentSnapshot() {
 initConsentDefaults();
 
 // Falls aus einem früheren Besuch bereits eine Entscheidung vorliegt, sofort anwenden (z. B. GA4
-// laden), ohne den Banner erneut zu zeigen.
+// und/oder Google Ads laden), ohne den Banner erneut zu zeigen.
 if (state.status === 'decided') {
   updateGoogleConsent(state);
-  loadGoogleTagIfConsented(state.statistics);
+  syncGoogleTags(state);
 }
 
 function apply(next) {
   state = next;
   updateGoogleConsent(state);
-  loadGoogleTagIfConsented(state.statistics);
+  syncGoogleTags(state);
   emit();
 }
 
