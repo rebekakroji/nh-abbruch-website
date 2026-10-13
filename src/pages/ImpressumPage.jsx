@@ -1,4 +1,4 @@
-import LegalLayout, { Placeholder } from './LegalLayout.jsx';
+import LegalLayout from './LegalLayout.jsx';
 import { SITE } from '../data/site.js';
 
 export default function ImpressumPage() {
@@ -8,11 +8,11 @@ export default function ImpressumPage() {
       <p>
         {SITE.name}
         <br />
-        <Placeholder>Vollständiger Name des Inhabers bzw. Rechtsform und Vertretungsberechtigte</Placeholder>
+        Inhaber: Nertil Hoxhaj
         <br />
-        <Placeholder>Straße und Hausnummer</Placeholder>
+        Hirschbachstraße 20
         <br />
-        <Placeholder>PLZ</Placeholder> Freising
+        85414 Kirchdorf an der Amper
       </p>
 
       <h2>Kontakt</h2>
@@ -20,29 +20,24 @@ export default function ImpressumPage() {
         E-Mail: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
         <br />
         WhatsApp / Mobil: {SITE.whatsappDisplay}
-        <br />
-        <Placeholder>Weitere Telefonnummer, falls vorhanden</Placeholder>
       </p>
 
-      <h2>Umsatzsteuer</h2>
-      <p>
-        <Placeholder>Umsatzsteuer-Identifikationsnummer nach § 27a UStG, falls vorhanden – oder Hinweis auf Kleinunternehmerregelung nach § 19 UStG</Placeholder>
-      </p>
+      <h2>Steuerliche Angaben</h2>
+      <p>Umsatzsteuer: 115/231/01317</p>
 
       <h2>Eintragungen und berufsrechtliche Angaben</h2>
-      <p>
-        <Placeholder>Handelsregister/Registernummer, zuständige Handwerkskammer bzw. Gewerbeanmeldung und weitere Pflichtangaben – nur falls zutreffend</Placeholder>
-      </p>
+      <p>7248294-0 – HWK München und Oberbayern</p>
 
       <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
       <p>
-        <Placeholder>Name und Anschrift der verantwortlichen Person</Placeholder>
+        Nertil Hoxhaj
+        <br />
+        Hirschbachstraße 20
+        <br />
+        85414 Kirchdorf an der Amper
       </p>
 
       <h2>Verbraucherstreitbeilegung</h2>
-      <p>
-        <Placeholder>Erklärung zur Teilnahme oder Nichtteilnahme an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle – bitte prüfen lassen</Placeholder>
-      </p>
     </LegalLayout>
   );
 }
